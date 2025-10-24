@@ -68,17 +68,23 @@
         }
 
         try {
+          // 從 layer 數據中讀取台灣的座標
+          const taiwanLayer = dataStore.findLayerById('taiwan');
+          const [lat, lng] = taiwanLayer ? taiwanLayer.center : [25.0457, 121.5196];
+
           mapInstance = L.map(mapContainer.value, {
-            center: defineStore.mapView.center,
-            zoom: defineStore.mapView.zoom,
+            center: [lat, lng], // 從 layer 數據讀取台灣座標
+            zoom: 17,
             zoomControl: false, // 禁用縮放控制
             attributionControl: false,
             dragging: true, // 啟用拖拽
-            touchZoom: true, // 啟用觸控縮放
-            doubleClickZoom: true, // 啟用雙擊縮放
-            scrollWheelZoom: true, // 啟用滾輪縮放
-            boxZoom: true, // 啟用框選縮放
-            keyboard: true, // 啟用鍵盤控制
+            touchZoom: false, // 禁用觸控縮放
+            doubleClickZoom: false, // 禁用雙擊縮放
+            scrollWheelZoom: false, // 禁用滾輪縮放
+            boxZoom: false, // 禁用框選縮放
+            keyboard: false, // 禁用鍵盤控制
+            zoomSnap: 0, // 禁用縮放吸附
+            zoomDelta: 0, // 禁用縮放增量
           });
 
           // 綁定地圖事件
@@ -124,8 +130,6 @@
       const handleZoomEnd = () => {
         if (mapInstance) {
           const zoom = mapInstance.getZoom();
-          const center = mapInstance.getCenter();
-          defineStore.setMapView([center.lat, center.lng], zoom);
           emit('update:zoomLevel', zoom);
         }
       };
@@ -137,7 +141,6 @@
       const handleMoveEnd = () => {
         if (mapInstance) {
           const center = mapInstance.getCenter();
-          defineStore.setMapView([center.lat, center.lng], mapInstance.getZoom());
           emit('update:currentCoords', { lat: center.lat, lng: center.lng });
         }
       };
@@ -235,6 +238,10 @@
             console.log('[MapTab] 地圖創建成功，開始初始化');
             setBasemap();
             syncLayers();
+            // 預設導航到台灣
+            setTimeout(() => {
+              navigateToCountry('taiwan');
+            }, 500);
           } else {
             console.log('[MapTab] 地圖創建失敗，100ms 後重試');
             setTimeout(tryCreateMap, 100);

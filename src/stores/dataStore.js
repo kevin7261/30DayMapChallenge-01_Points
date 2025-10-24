@@ -20,8 +20,6 @@ import { ref, computed } from 'vue';
 export const useDataStore = defineStore(
   'data', // 商店唯一標識符
   () => {
-    // 🎯 固定縮放級別常數
-    const COUNTRY_ZOOM_LEVEL = 17;
     /**
      * 🗺️ 圖層配置數據 (Layer Configuration Data)
      *
@@ -198,12 +196,12 @@ export const useDataStore = defineStore(
       // 使用國家中心座標
       const [lat, lng] = countryLayer.center;
       const targetCenter = [lat, lng]; // Leaflet 需要 [lat, lng] 格式
-      const optimalZoom = COUNTRY_ZOOM_LEVEL; // 使用固定的縮放級別
+      const optimalZoom = 16; // 使用固定的縮放級別 16
 
       // 執行地圖導航
       try {
         mapInstance.value.setView(targetCenter, optimalZoom, { animate: false });
-        console.log(`🌍 成功導航到國家: ${countryLayer.layerName}`);
+        console.log(`🌍 成功導航到國家: ${countryLayer.layerName}，縮放等級: ${optimalZoom}`);
       } catch (error) {
         console.error('❌ 地圖導航失敗:', error);
       }
