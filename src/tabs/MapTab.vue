@@ -39,6 +39,7 @@
       // 🎛️ 地圖控制狀態
       const isMapReady = ref(false);
       const mapContainerId = ref(`leaflet-map-${Math.random().toString(36).substr(2, 9)}`);
+      const selectedCountryId = ref('taiwan'); // 預設選中台灣
 
       // 📊 計算屬性：檢查是否有任何圖層可見
       const isAnyLayerVisible = computed(() => dataStore.getAllLayers().length > 0);
@@ -48,6 +49,7 @@
        * @param {string} countryId - 國家 ID
        */
       const navigateToCountry = (countryId) => {
+        selectedCountryId.value = countryId; // 更新選中狀態
         dataStore.navigateToCountry(countryId);
       };
 
