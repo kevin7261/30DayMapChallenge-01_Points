@@ -14,7 +14,7 @@
   import MapTab from '../tabs/MapTab.vue';
   import { useDataStore } from '@/stores/dataStore.js';
   import { useDefineStore } from '@/stores/defineStore.js';
-  import { ref, onMounted, computed } from 'vue';
+  // import { ref, onMounted, computed } from 'vue';
 
   export default {
     name: 'HomeView',
