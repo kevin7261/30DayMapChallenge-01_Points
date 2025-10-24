@@ -59,7 +59,7 @@ export const useDataStore = defineStore(
           {
             layerId: 'japan',
             layerName: 'JAPAN',
-            center: [35.69167, 139.69167],
+            center: [35.684580490329374, 139.77440880399962],
           },
           {
             layerId: 'usa',

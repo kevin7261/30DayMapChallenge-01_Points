@@ -139,9 +139,6 @@
           const center = mapInstance.getCenter();
           defineStore.setMapView([center.lat, center.lng], mapInstance.getZoom());
           emit('update:currentCoords', { lat: center.lat, lng: center.lng });
-
-          // 更新中心點標記位置
-          addCenterMarker();
         }
       };
 
@@ -170,38 +167,6 @@
         }
 
         // 使用預設的透明背景，不設定任何特殊背景色
-      };
-
-      // 中心點標記
-      let centerMarker = null;
-
-      /**
-       * 🔴 添加中心點標記
-       * 在地圖中心添加一個紅色圓點
-       */
-      const addCenterMarker = () => {
-        if (!mapInstance) return;
-
-        // 移除現有的中心點標記
-        if (centerMarker) {
-          mapInstance.removeLayer(centerMarker);
-        }
-
-        // 創建紅色圓點圖標
-        const redIcon = L.divIcon({
-          className: 'center-marker',
-          html: '<div style="width: 12px; height: 12px; background-color: red; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>',
-          iconSize: [12, 12],
-          iconAnchor: [6, 6],
-        });
-
-        // 獲取地圖中心點
-        const center = mapInstance.getCenter();
-
-        // 添加中心點標記
-        centerMarker = L.marker([center.lat, center.lng], { icon: redIcon }).addTo(mapInstance);
-
-        console.log('[MapTab] 中心點標記已添加');
       };
 
       /**
@@ -269,7 +234,6 @@
           if (createMap()) {
             console.log('[MapTab] 地圖創建成功，開始初始化');
             setBasemap();
-            addCenterMarker();
             syncLayers();
           } else {
             console.log('[MapTab] 地圖創建失敗，100ms 後重試');
