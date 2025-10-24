@@ -157,11 +157,12 @@
 
         const config = defineStore.basemaps.find((b) => b.value === defineStore.selectedBasemap);
 
-        // 添加標準底圖圖層
+        // 添加底圖圖層
         if (config && config.url) {
           currentTileLayer = L.tileLayer(config.url, {
-            attribution: '© OpenStreetMap contributors',
-            maxZoom: 18,
+            attribution: '© Google',
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
           });
           mapInstance.addLayer(currentTileLayer);
         }
