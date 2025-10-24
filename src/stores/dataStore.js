@@ -20,6 +20,8 @@ import { ref, computed } from 'vue';
 export const useDataStore = defineStore(
   'data', // 商店唯一標識符
   () => {
+    // 🎯 固定縮放級別常數 - 唯一設定點
+    const FIXED_ZOOM_LEVEL = 17;
     /**
      * 🗺️ 圖層配置數據 (Layer Configuration Data)
      *
@@ -196,7 +198,7 @@ export const useDataStore = defineStore(
       // 使用國家中心座標
       const [lat, lng] = countryLayer.center;
       const targetCenter = [lat, lng]; // Leaflet 需要 [lat, lng] 格式
-      const optimalZoom = 16; // 使用固定的縮放級別 16
+      const optimalZoom = FIXED_ZOOM_LEVEL; // 使用固定的縮放級別
 
       // 執行地圖導航
       try {
@@ -218,6 +220,7 @@ export const useDataStore = defineStore(
       navigateToCountry, // 導航到指定國家
       // 所有圖層都是可見的，所以直接返回所有圖層
       visibleLayers: computed(() => getAllLayers()),
+      FIXED_ZOOM_LEVEL, // 固定縮放級別常數
     };
   },
   {

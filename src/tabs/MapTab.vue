@@ -74,7 +74,7 @@
 
           mapInstance = L.map(mapContainer.value, {
             center: [lat, lng], // 從 layer 數據讀取台灣座標
-            zoom: 17,
+            zoom: dataStore.FIXED_ZOOM_LEVEL,
             zoomControl: false, // 禁用縮放控制
             attributionControl: false,
             dragging: true, // 啟用拖拽
