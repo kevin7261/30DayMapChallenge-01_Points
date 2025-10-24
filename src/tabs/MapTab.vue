@@ -24,9 +24,7 @@
 
   export default {
     name: 'MapTab',
-    props: {
-      currentCountry: { type: String, default: '國家名稱' },
-    },
+    props: {},
     emits: ['map-ready'],
     setup(props, { emit }) {
       // 📦 存儲實例
@@ -42,34 +40,8 @@
       const isMapReady = ref(false);
       const mapContainerId = ref(`leaflet-map-${Math.random().toString(36).substr(2, 9)}`);
 
-      // 📊 計算屬性：檢查是否有任何圖層可見（現在所有圖層都直接可見）
+      // 📊 計算屬性：檢查是否有任何圖層可見
       const isAnyLayerVisible = computed(() => dataStore.getAllLayers().length > 0);
-
-      // 🏙️ 當前國家信息
-      const currentCountryInfo = computed(() => {
-        if (!props.currentCountry) {
-          console.log('❌ currentCountryInfo: 沒有當前國家');
-          return null;
-        }
-
-        // 從dataStore中獲取國家信息
-        const allLayers = dataStore.getAllLayers();
-        console.log(
-          '🔍 查找國家:',
-          props.currentCountry,
-          '可用圖層:',
-          allLayers.map((l) => l.layerName)
-        );
-
-        const countryLayer = allLayers.find((layer) => layer.layerName === props.currentCountry);
-        if (countryLayer) {
-          console.log('✅ 找到國家圖層:', countryLayer.layerName);
-          return {};
-        } else {
-          console.log('❌ 未找到國家圖層:', props.currentCountry);
-          return null;
-        }
-      });
 
       /**
        * 🏗️ 創建地圖實例
@@ -104,7 +76,23 @@
 
           // 移除地圖點擊事件處理
 
-          // 設定 popup 面板的 z-index
+          // 設定圖層 z-index 順序（從底層到頂層）
+          // 1. 底圖（世界地圖）- 最底層
+          if (mapInstance.getPane('tilePane')) {
+            mapInstance.getPane('tilePane').style.zIndex = 1000;
+          }
+
+          // 2. 標記圖層
+          if (mapInstance.getPane('markerPane')) {
+            mapInstance.getPane('markerPane').style.zIndex = 2000;
+          }
+
+          // 3. 覆蓋圖層（heatmap 等）
+          if (mapInstance.getPane('overlayPane')) {
+            mapInstance.getPane('overlayPane').style.zIndex = 2100;
+          }
+
+          // 4. 彈出視窗 - 最頂層
           mapInstance.getPane('popupPane').style.zIndex = 2200;
 
           isMapReady.value = true;
@@ -314,7 +302,6 @@
         mapContainer,
         mapContainerId,
         isAnyLayerVisible,
-        currentCountryInfo,
         highlightFeature,
         invalidateSize,
         defineStore,
@@ -328,14 +315,6 @@
   <div id="map-container" class="h-100 w-100 position-relative bg-transparent z-0">
     <!-- 🗺️ Leaflet 地圖容器 -->
     <div :id="mapContainerId" ref="mapContainer" class="h-100 w-100"></div>
-
-    <!-- 中心點顯示 -->
-    <div
-      class="position-absolute top-50 start-50 translate-middle"
-      style="z-index: 1000; pointer-events: none"
-    >
-      <div class="rounded-circle bg-white" style="width: 4px; height: 4px"></div>
-    </div>
   </div>
 </template>
 

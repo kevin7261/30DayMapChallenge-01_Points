@@ -21,7 +21,7 @@ export const useDataStore = defineStore(
   'data', // 商店唯一標識符
   () => {
     // 🎯 固定縮放級別常數
-    const COUNTRY_ZOOM_LEVEL = 16;
+    const COUNTRY_ZOOM_LEVEL = 17;
     /**
      * 🗺️ 圖層配置數據 (Layer Configuration Data)
      *
@@ -41,51 +41,7 @@ export const useDataStore = defineStore(
      *   - center: 國家中心座標
      *   - zoom: 縮放級別
      */
-    const layers = ref([
-      {
-        // 🌍 世界國家地圖集合
-        // 包含各大洲代表性國家的座標點
-        groupName: '世界國家',
-        groupLayers: [
-          {
-            // 🏝️ 台灣國家配置
-            layerId: 'Taiwan', // 圖層唯一標識符
-            layerName: 'TAIWAN', // 圖層顯示名稱
-            center: [121.519639, 25.045694], // 台灣中心座標 [經度, 緯度]
-          },
-          {
-            // 🏛️ 中國國家配置
-            layerId: 'China', // 圖層唯一標識符
-            layerName: 'CHINA', // 圖層顯示名稱
-            center: [116.39162, 39.89898], // 中國中心座標 [經度, 緯度]
-          },
-          {
-            // 🏯 日本國家配置
-            layerId: 'Japan', // 圖層唯一標識符
-            layerName: 'JAPAN', // 圖層顯示名稱
-            center: [139.774167, 35.684444], // 日本中心座標 [經度, 緯度]
-          },
-          {
-            // 🏛️ 美國國家配置
-            layerId: 'UnitedStates', // 圖層唯一標識符
-            layerName: 'UNITED STATES', // 圖層顯示名稱
-            center: [-77.036548, 38.895108], // 美國中心座標 [經度, 緯度]
-          },
-          {
-            // 🏛️ 法國國家配置
-            layerId: 'France', // 圖層唯一標識符
-            layerName: 'FRANCE', // 圖層顯示名稱
-            center: [2.3488, 48.8534], // 法國中心座標 [經度, 緯度]
-          },
-          {
-            // 🏛️ 德國國家配置
-            layerId: 'Germany', // 圖層唯一標識符
-            layerName: 'GERMANY', // 圖層顯示名稱
-            center: [13.399, 52.5108], // 德國中心座標 [經度, 緯度]
-          },
-        ],
-      },
-    ]);
+    const layers = ref([]);
 
     /**
      * 🔍 根據圖層 ID 查找圖層對象 (Find Layer by ID)
