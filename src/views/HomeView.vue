@@ -14,7 +14,7 @@
   import MapTab from '../tabs/MapTab.vue';
   import { useDataStore } from '@/stores/dataStore.js';
   import { useDefineStore } from '@/stores/defineStore.js';
-  // import { ref, onMounted, computed } from 'vue';
+  import { computed } from 'vue';
 
   export default {
     name: 'HomeView',
@@ -31,9 +31,22 @@
        */
       const setMapInstance = (map) => dataStore.setMapInstance(map);
 
+      /**
+       * 🌍 導航到指定國家
+       * @param {string} countryId - 國家 ID
+       */
+      const navigateToCountry = (countryId) => {
+        dataStore.navigateToCountry(countryId);
+      };
+
+      // 📊 計算屬性：獲取所有國家圖層
+      const countries = computed(() => dataStore.getAllLayers());
+
       return {
         setMapInstance,
         defineStore,
+        navigateToCountry,
+        countries,
       };
     },
   };

@@ -41,7 +41,44 @@ export const useDataStore = defineStore(
      *   - center: 國家中心座標
      *   - zoom: 縮放級別
      */
-    const layers = ref([]);
+    // 🌍 六大國家數據配置
+    const layers = ref([
+      {
+        groupName: '世界國家',
+        groupLayers: [
+          {
+            layerId: 'taiwan',
+            layerName: 'TAIWAN',
+            center: [25.0457, 121.5196],
+          },
+          {
+            layerId: 'china',
+            layerName: 'CHINA',
+            center: [39.89877, 116.39167],
+          },
+          {
+            layerId: 'japan',
+            layerName: 'JAPAN',
+            center: [35.69167, 139.69167],
+          },
+          {
+            layerId: 'usa',
+            layerName: 'UNITED STATES',
+            center: [38.89511, -77.03655],
+          },
+          {
+            layerId: 'france',
+            layerName: 'FRANCE',
+            center: [48.8534, 2.3488],
+          },
+          {
+            layerId: 'germany',
+            layerName: 'GERMANY',
+            center: [52.5108, 13.399],
+          },
+        ],
+      },
+    ]);
 
     /**
      * 🔍 根據圖層 ID 查找圖層對象 (Find Layer by ID)
@@ -159,7 +196,7 @@ export const useDataStore = defineStore(
       }
 
       // 使用國家中心座標
-      const [lng, lat] = countryLayer.center;
+      const [lat, lng] = countryLayer.center;
       const targetCenter = [lat, lng]; // Leaflet 需要 [lat, lng] 格式
       const optimalZoom = COUNTRY_ZOOM_LEVEL; // 使用固定的縮放級別
 

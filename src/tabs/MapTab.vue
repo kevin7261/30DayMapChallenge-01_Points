@@ -44,6 +44,17 @@
       const isAnyLayerVisible = computed(() => dataStore.getAllLayers().length > 0);
 
       /**
+       * 🌍 導航到指定國家
+       * @param {string} countryId - 國家 ID
+       */
+      const navigateToCountry = (countryId) => {
+        dataStore.navigateToCountry(countryId);
+      };
+
+      // 📊 計算屬性：獲取所有國家圖層
+      const countries = computed(() => dataStore.getAllLayers());
+
+      /**
        * 🏗️ 創建地圖實例
        * 初始化 Leaflet 地圖並設定基本配置
        */
@@ -60,14 +71,14 @@
           mapInstance = L.map(mapContainer.value, {
             center: defineStore.mapView.center,
             zoom: defineStore.mapView.zoom,
-            zoomControl: false,
+            zoomControl: false, // 禁用縮放控制
             attributionControl: false,
-            dragging: false, // 禁用拖拽
-            touchZoom: false, // 禁用觸控縮放
-            doubleClickZoom: false, // 禁用雙擊縮放
-            scrollWheelZoom: false, // 禁用滾輪縮放
-            boxZoom: false, // 禁用框選縮放
-            keyboard: false, // 禁用鍵盤控制
+            dragging: true, // 啟用拖拽
+            touchZoom: true, // 啟用觸控縮放
+            doubleClickZoom: true, // 啟用雙擊縮放
+            scrollWheelZoom: true, // 啟用滾輪縮放
+            boxZoom: true, // 啟用框選縮放
+            keyboard: true, // 啟用鍵盤控制
           });
 
           // 綁定地圖事件
@@ -128,6 +139,9 @@
           const center = mapInstance.getCenter();
           defineStore.setMapView([center.lat, center.lng], mapInstance.getZoom());
           emit('update:currentCoords', { lat: center.lat, lng: center.lng });
+
+          // 更新中心點標記位置
+          addCenterMarker();
         }
       };
 
@@ -158,7 +172,37 @@
         // 使用預設的透明背景，不設定任何特殊背景色
       };
 
-      // 移除地圖標記功能，改為在 HTML 上顯示中心點
+      // 中心點標記
+      let centerMarker = null;
+
+      /**
+       * 🔴 添加中心點標記
+       * 在地圖中心添加一個紅色圓點
+       */
+      const addCenterMarker = () => {
+        if (!mapInstance) return;
+
+        // 移除現有的中心點標記
+        if (centerMarker) {
+          mapInstance.removeLayer(centerMarker);
+        }
+
+        // 創建紅色圓點圖標
+        const redIcon = L.divIcon({
+          className: 'center-marker',
+          html: '<div style="width: 12px; height: 12px; background-color: red; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>',
+          iconSize: [12, 12],
+          iconAnchor: [6, 6],
+        });
+
+        // 獲取地圖中心點
+        const center = mapInstance.getCenter();
+
+        // 添加中心點標記
+        centerMarker = L.marker([center.lat, center.lng], { icon: redIcon }).addTo(mapInstance);
+
+        console.log('[MapTab] 中心點標記已添加');
+      };
 
       /**
        * 🎯 高亮顯示特定要素
@@ -225,6 +269,7 @@
           if (createMap()) {
             console.log('[MapTab] 地圖創建成功，開始初始化');
             setBasemap();
+            addCenterMarker();
             syncLayers();
           } else {
             console.log('[MapTab] 地圖創建失敗，100ms 後重試');
@@ -305,6 +350,8 @@
         highlightFeature,
         invalidateSize,
         defineStore,
+        navigateToCountry,
+        countries,
       };
     },
   };
@@ -313,6 +360,29 @@
 <template>
   <!-- 🗺️ 地圖主容器 -->
   <div id="map-container" class="h-100 w-100 position-relative bg-transparent z-0">
+    <!-- 🎛️ 左側中間控制面板 -->
+    <div
+      class="position-absolute"
+      style="top: 50%; left: 0; transform: translateY(-50%); z-index: 1000; padding: 1rem"
+    >
+      <div class="bg-dark bg-opacity-75 rounded-3 p-3">
+        <!-- 🌍 國家導航區域 -->
+        <div class="">
+          <div class="d-flex flex-column gap-1">
+            <button
+              v-for="country in countries"
+              :key="country.layerId"
+              type="button"
+              class="btn border-0 my-country-btn my-font-sm-white px-4 py-3 text-center"
+              @click="navigateToCountry(country.layerId)"
+            >
+              {{ country.layerName }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 🗺️ Leaflet 地圖容器 -->
     <div :id="mapContainerId" ref="mapContainer" class="h-100 w-100"></div>
   </div>
