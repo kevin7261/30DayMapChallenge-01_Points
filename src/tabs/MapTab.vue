@@ -325,6 +325,7 @@
         defineStore,
         navigateToCountry,
         countries,
+        selectedCountryId,
       };
     },
   };
@@ -347,6 +348,7 @@
               :key="country.layerId"
               type="button"
               class="btn border-0 my-country-btn my-font-sm-white px-4 py-3 text-center"
+              :class="{ selected: selectedCountryId === country.layerId }"
               @click="navigateToCountry(country.layerId)"
             >
               {{ country.layerName }}
@@ -363,4 +365,21 @@
 
 <style>
   @import '../assets/css/common.css';
+
+  /* 選中狀態的高亮樣式 */
+  .my-country-btn.selected {
+    background-color: rgba(255, 255, 255, 0.3) !important;
+    border-radius: 8px !important;
+    margin: 2px 0 !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5) !important;
+  }
+
+  .my-country-btn {
+    transition: all 0.3s ease;
+    border-radius: 8px !important;
+  }
+
+  .my-country-btn:hover:not(.selected) {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
 </style>
