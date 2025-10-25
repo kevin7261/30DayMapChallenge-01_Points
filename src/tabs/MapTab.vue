@@ -388,28 +388,9 @@
   }
 
   .center-dot {
-    width: 12px;
-    height: 12px;
-    background-color: #dc3545; /* Bootstrap 紅色 */
+    width: 4px;
+    height: 4px;
+    background-color: red; /* Bootstrap 紅色 */
     border-radius: 50%;
-    border: 2px solid #ffffff; /* 白色邊框 */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    animation: pulse 2s infinite; /* 脈衝動畫 */
-  }
-
-  /* 脈衝動畫效果 */
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-      opacity: 1;
-    }
-    50% {
-      transform: scale(1.2);
-      opacity: 0.8;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
   }
 </style>
