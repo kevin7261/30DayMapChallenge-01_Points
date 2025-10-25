@@ -33,26 +33,9 @@
      * 使用 Composition API 設定應用程式層級的狀態管理
      */
     setup() {
-      // ⏳ 全域載入狀態管理 (Global Loading State Management)
-      /** ⏳ 是否顯示載入覆蓋層 */
-      const isLoading = ref(false);
-      /** 📝 載入文字提示 */
-      const loadingText = ref('載入中...');
-      /** 📊 載入進度百分比 (0-100) */
-      const loadingProgress = ref(0);
-      /** 📊 是否顯示進度條 */
-      const showLoadingProgress = ref(false);
-      /** 📝 載入子文字說明 */
-      const loadingSubText = ref('');
-
       // 📤 返回響應式數據和函數給模板使用 (Return Reactive Data and Functions)
       return {
-        // ⏳ 載入狀態
-        isLoading, // 載入狀態開關
-        loadingText, // 載入主要文字
-        loadingProgress, // 載入進度
-        showLoadingProgress, // 是否顯示進度條
-        loadingSubText, // 載入輔助文字
+        // 目前沒有需要返回的狀態
       };
     },
   };

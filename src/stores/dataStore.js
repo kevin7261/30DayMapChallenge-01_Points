@@ -1,13 +1,44 @@
 /**
  * 📦 數據存儲模組 (Data Store Module)
- *
- * 管理城市圖層數據和地圖導航功能
- * 使用 Pinia 狀態管理系統和 Vue 3 Composition API
+ * 
+ * 這是 30 Day Map Challenge - Points 專案的核心狀態管理模組，負責管理世界地圖的
+ * 國家數據、地圖導航功能以及用戶互動狀態。本模組採用現代化的 Vue 3 Composition API
+ * 和 Pinia 狀態管理系統，提供響應式的數據管理和高效的狀態更新機制。
+ * 
+ * 🎯 主要功能：
+ * - 🌍 世界六大國家數據管理（台灣、中國、日本、美國、法國、德國）
+ * - 🗺️ 地圖導航和視圖控制
+ * - 📍 國家中心座標和縮放級別管理
+ * - 🔄 響應式狀態更新和數據持久化
+ * - 🎛️ 地圖實例管理和生命週期控制
+ * 
+ * 🏗️ 技術架構：
+ * - Vue 3 Composition API：提供更好的 TypeScript 支援和代碼組織
+ * - Pinia 狀態管理：輕量級、模組化的狀態管理解決方案
+ * - 響應式數據：使用 ref 和 computed 實現自動更新
+ * - 數據持久化：使用 Pinia 的 persist 插件保存用戶狀態
+ * 
+ * 📋 數據結構：
+ * - layers: 分組結構的國家圖層配置
+ * - selectedFeature: 當前選中的地圖要素
+ * - mapInstance: Leaflet 地圖實例引用
+ * - FIXED_ZOOM_LEVEL: 固定縮放級別常數
+ * 
+ * 🔧 核心方法：
+ * - findLayerById(): 根據 ID 查找圖層
+ * - getAllLayers(): 獲取所有圖層的扁平陣列
+ * - navigateToCountry(): 導航到指定國家
+ * - setMapInstance(): 設定地圖實例
+ * - setSelectedFeature(): 設定選中的地圖要素
+ * 
+ * @author 30 Day Map Challenge Team
+ * @version 1.0.0
+ * @since 2024
  */
 
-// 核心依賴
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+// 🔧 核心依賴引入 (Core Dependencies Import)
+import { defineStore } from 'pinia';        // Pinia 狀態管理庫
+import { ref, computed } from 'vue';       // Vue 3 響應式 API
 
 /**
  * 🏪 數據存儲商店定義 (Data Store Definition)

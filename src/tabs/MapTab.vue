@@ -117,7 +117,6 @@
           isMapReady.value = true;
           emit('map-ready', mapInstance);
 
-          console.log('[MapTab] 地圖創建成功');
           return true;
         } catch (error) {
           console.error('[MapTab] 地圖創建失敗:', error);
@@ -174,29 +173,7 @@
         // 使用預設的透明背景，不設定任何特殊背景色
       };
 
-      /**
-       * 🎯 高亮顯示特定要素
-       * 當用戶點擊地圖要素時高亮顯示
-       */
-      const highlightFeature = (feature) => {
-        // 重置所有圖層樣式
-        resetAllLayerStyles();
-
-        // 高亮選中的要素
-        if (feature && feature._leaflet_id) {
-          // 這裡可以添加高亮邏輯
-          console.log('高亮要素:', feature.properties.name);
-        }
-      };
-
-      /**
-       * 🔄 重置所有圖層樣式
-       * 清除所有高亮效果
-       */
-      const resetAllLayerStyles = () => {
-        // 這裡可以添加重置樣式的邏輯
-        console.log('重置圖層樣式');
-      };
+      // 移除未使用的高亮功能函數
 
       /**
        * 🔄 同步圖層（已移除標記功能）
@@ -204,7 +181,6 @@
        */
       const syncLayers = () => {
         // 移除地圖標記功能，不需要同步任何圖層
-        console.log('圖層同步已禁用，使用 HTML 中心點顯示');
       };
 
       /**
@@ -237,7 +213,6 @@
           console.log(`[MapTab] 嘗試創建地圖 (${attempts}/${maxAttempts})`);
 
           if (createMap()) {
-            console.log('[MapTab] 地圖創建成功，開始初始化');
             setBasemap();
             syncLayers();
             // 預設導航到台灣
@@ -245,7 +220,6 @@
               navigateToCountry('taiwan');
             }, 500);
           } else {
-            console.log('[MapTab] 地圖創建失敗，100ms 後重試');
             setTimeout(tryCreateMap, 100);
           }
         };
@@ -266,13 +240,11 @@
           }
 
           resizeTimeout = setTimeout(() => {
-            console.log('🔄 容器大小變化，刷新地圖');
             invalidateSize();
           }, 200);
         });
 
         resizeObserver.observe(mapContainer.value);
-        console.log('✅ ResizeObserver 已設置');
       };
 
       // 🧹 生命週期：組件掛載
@@ -320,7 +292,6 @@
         mapContainer,
         mapContainerId,
         isAnyLayerVisible,
-        highlightFeature,
         invalidateSize,
         defineStore,
         navigateToCountry,
