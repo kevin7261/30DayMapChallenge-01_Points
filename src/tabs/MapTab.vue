@@ -1,19 +1,55 @@
 <script>
   /**
-   * 🗺️ MapTab.vue - 簡化版地圖組件 (Simplified Map Component)
+   * 🗺️ MapTab.vue - 地圖顯示組件 (Map Display Component)
    *
-   * 這是一個簡化的地圖組件，專為世界城市地圖展示設計。
-   * 主要功能：
-   * - 顯示世界六大城市的 GeoJSON 數據
-   * - 提供城市導航功能
-   * - 支援多種底圖切換
-   * - 響應式設計
+   * 這是應用程式的核心地圖組件，負責渲染世界地圖、處理用戶互動和提供導航功能。
+   * 本組件整合了 Leaflet 地圖庫、Pinia 狀態管理和 Vue 3 響應式系統，
+   * 提供流暢的地圖瀏覽體驗和豐富的互動功能。
    *
-   * 技術架構：
-   * - Vue 3 Composition API
-   * - Leaflet 地圖庫
-   * - Pinia 狀態管理
-   * - Bootstrap 5 樣式
+   * 🎯 核心功能：
+   * - 🗺️ 地圖渲染：使用 Leaflet 渲染世界地圖和衛星圖像
+   * - 🌍 國家導航：提供六大國家的快速導航功能
+   * - 🎛️ 互動控制：處理地圖縮放、拖拽和視圖變更
+   * - 📱 響應式適配：自動適應不同設備的螢幕尺寸
+   * - 🎨 視覺效果：提供平滑的動畫和過渡效果
+   * - 🔄 狀態同步：與 Pinia 狀態管理系統保持同步
+   *
+   * 🏗️ 組件架構：
+   * - 地圖容器：提供地圖渲染的 DOM 容器
+   * - 控制面板：國家導航按鈕和用戶控制
+   * - 地圖實例：Leaflet 地圖對象和配置
+   * - 事件處理：用戶互動和地圖事件監聽
+   * - 狀態管理：與 Pinia Store 的數據同步
+   *
+   * 🔧 技術整合：
+   * - Leaflet 1.9+：開源地圖庫，提供地圖渲染和互動
+   * - Vue 3 Composition API：現代化的組件開發模式
+   * - Pinia 狀態管理：響應式數據管理和狀態同步
+   * - Bootstrap 5：響應式 UI 框架和樣式系統
+   * - ResizeObserver：容器尺寸變更監聽和地圖刷新
+   *
+   * 📊 數據流：
+   * 1. 組件掛載 → 初始化地圖實例
+   * 2. 地圖準備 → 設定底圖和配置
+   * 3. 用戶操作 → 觸發導航事件
+   * 4. 狀態更新 → 響應式重新渲染
+   * 5. 地圖同步 → 更新視圖和位置
+   *
+   * 🎨 視覺設計：
+   * - Google 衛星底圖：提供真實的地理視覺效果
+   * - 深色控制面板：半透明背景，突出地圖內容
+   * - 白色中心點：固定標記，便於視覺定位
+   * - 平滑動畫：地圖移動和視圖變更的流暢過渡
+   *
+   * 🚀 性能優化：
+   * - 延遲初始化：等待容器準備就緒後創建地圖
+   * - 重試機制：地圖創建失敗時自動重試
+   * - 尺寸監聽：使用 ResizeObserver 優化容器變更處理
+   * - 事件防抖：避免頻繁的地圖更新操作
+   *
+   * @author 30 Day Map Challenge Team
+   * @version 1.0.0
+   * @since 2024
    */
 
   import { ref, onMounted, onUnmounted, watch, nextTick, computed } from 'vue';
@@ -329,6 +365,11 @@
       </div>
     </div>
 
+    <!-- 🎯 地圖中心點標記 -->
+    <div class="position-absolute map-center-point">
+      <div class="center-dot"></div>
+    </div>
+
     <!-- 🗺️ Leaflet 地圖容器 -->
     <div :id="mapContainerId" ref="mapContainer" class="h-100 w-100"></div>
   </div>
@@ -336,4 +377,39 @@
 
 <style>
   @import '../assets/css/common.css';
+
+  /* 🎯 地圖中心點樣式 */
+  .map-center-point {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    pointer-events: none; /* 不影響地圖互動 */
+  }
+
+  .center-dot {
+    width: 12px;
+    height: 12px;
+    background-color: #dc3545; /* Bootstrap 紅色 */
+    border-radius: 50%;
+    border: 2px solid #ffffff; /* 白色邊框 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    animation: pulse 2s infinite; /* 脈衝動畫 */
+  }
+
+  /* 脈衝動畫效果 */
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
 </style>
